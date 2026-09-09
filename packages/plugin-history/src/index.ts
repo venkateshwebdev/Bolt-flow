@@ -1,4 +1,4 @@
-import type { BoltDocument, BoltPlugin } from '@bolt-flow/core';
+import type { BoltDocument, BoltPlugin } from 'bolt-flow-core';
 
 export function historyPlugin({ limit = 100, mergeWindow = 500 }: { limit?: number; mergeWindow?: number } = {}): BoltPlugin {
   if (!Number.isInteger(limit) || limit < 1) throw new Error('History limit must be a positive integer.');

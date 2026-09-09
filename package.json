@@ -8,9 +8,9 @@
     "apps/*"
   ],
   "scripts": {
-    "dev": "npm run dev -w @bolt-flow/playground",
-    "build:packages": "npm run build -w @bolt-flow/core && npm run build -w @bolt-flow/react && npm run build -w @bolt-flow/plugin-draw -w @bolt-flow/plugin-export -w @bolt-flow/plugin-history -w @bolt-flow/plugin-layout -w @bolt-flow/plugin-storage",
-    "build": "npm run build:packages && npm run build -w @bolt-flow/playground",
+    "dev": "npm run dev -w bolt-flow-playground",
+    "build:packages": "npm run build -w bolt-flow-core && npm run build -w bolt-flow-react && npm run build -w bolt-flow-plugin-draw -w bolt-flow-plugin-export -w bolt-flow-plugin-history -w bolt-flow-plugin-layout -w bolt-flow-plugin-storage",
+    "build": "npm run build:packages && npm run build -w bolt-flow-playground",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",

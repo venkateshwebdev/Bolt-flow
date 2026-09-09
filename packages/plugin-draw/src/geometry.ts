@@ -1,5 +1,5 @@
 import { getStroke } from 'perfect-freehand';
-import type { BoltNode, Point } from '@bolt-flow/core';
+import type { BoltNode, Point } from 'bolt-flow-core';
 
 export type Sample = [number, number, number];
 export type DrawShape = 'pen' | 'rectangle' | 'ellipse' | 'diamond' | 'line' | 'arrow' | 'text' | 'comment' | (string & {});

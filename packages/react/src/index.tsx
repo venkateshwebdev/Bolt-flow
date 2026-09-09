@@ -1,6 +1,6 @@
 import { createContext, useContext, useSyncExternalStore, useState, useEffect, useMemo, useCallback, type ComponentType, type ReactNode } from 'react';
 import { ReactFlow, ReactFlowProvider, Background, BackgroundVariant, Controls, MiniMap, applyNodeChanges, applyEdgeChanges, type Node, type Edge, type ReactFlowProps, type NodeChange, type EdgeChange, type Connection, type NodeTypes, type EdgeTypes, type NodeProps } from '@xyflow/react';
-import { BoltRuntime, type BoltNode, type Json, type BoltEdge } from '@bolt-flow/core';
+import { BoltRuntime, type BoltNode, type Json, type BoltEdge } from 'bolt-flow-core';
 
 const RuntimeContext = createContext<BoltRuntime | null>(null);
 export function BoltProvider({ runtime, children }: { runtime: BoltRuntime; children: ReactNode }) {

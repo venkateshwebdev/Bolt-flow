@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { BoltRuntime } from '@bolt-flow/core';
-import { BoltProvider, BoltCanvas, BoltTools } from '@bolt-flow/react';
-import { drawPlugin, type DrawCreateInput, type DrawResult } from '@bolt-flow/plugin-draw';
-import '@bolt-flow/react/style.css';
-import '@bolt-flow/plugin-draw/style.css';
+import { BoltRuntime } from 'bolt-flow-core';
+import { BoltProvider, BoltCanvas, BoltTools } from 'bolt-flow-react';
+import { drawPlugin, type DrawCreateInput, type DrawResult } from 'bolt-flow-plugin-draw';
+import 'bolt-flow-react/style.css';
+import 'bolt-flow-plugin-draw/style.css';
 
 // No source aliases: this fixture consumes only built workspace exports and public CSS.
 const runtime = new BoltRuntime().use(drawPlugin({ shapes: [{ id: 'triangle', label: 'Triangle', path: ({ width, height }) => `M${width / 2},8 L${width - 8},${height - 8} L8,${height - 8} Z` }] }));

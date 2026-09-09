@@ -4,7 +4,7 @@
 
 Bolt Flow puts workflow nodes, native drawings, and local comments on the **same React Flow canvas**. An independent, optional drawing plugin uses the public `perfect-freehand` API for pen outlines. A small, framework-independent kernel owns the document, commands, and plugin lifecycle. Neither core nor the React adapter imports optional feature packages; there is no Excalidraw dependency or separate drawing editor.
 
-**Status: 0.1.0 alpha, unpublished.** Package names use the proposed `@bolt-flow` scope; ownership and availability must be checked before publishing. Use the local npm workspaces, not registry installation instructions. This is not a claim of Excalidraw or full drawing-editor parity.
+**Status: 0.1.0 alpha, unpublished.** Package names use the unscoped `bolt-flow-` prefix; ownership and availability must be checked before publishing. Use the local npm workspaces, not registry installation instructions. This is not a claim of Excalidraw or full drawing-editor parity.
 
 ## Try the playground
 
@@ -33,13 +33,13 @@ Open http://127.0.0.1:5173. The VS Code task **Bolt Flow: playground** also star
 
 | Package | Responsibility | Extra runtime dependencies |
 | --- | --- | --- |
-| `@bolt-flow/core` | Serializable document, subscriptions, commands, plugin lifecycle | None |
-| `@bolt-flow/react` | Provider, hooks, controlled canvas, tool/overlay/renderer slots | React peers, `@xyflow/react` |
-| `@bolt-flow/plugin-draw` | Native ink, custom shapes/fonts, smart edges, attached annotations and comments | `perfect-freehand`, `lucide-react`, `@fontsource/gochi-hand`; core, React adapter, XYFlow and React peers |
-| `@bolt-flow/plugin-history` | Bounded undo/redo and grouped edits | Core peer only |
-| `@bolt-flow/plugin-layout` | Directional Dagre graph layout | `@dagrejs/dagre` |
-| `@bolt-flow/plugin-storage` | Debounced local persistence and adapter interface | Core peer only |
-| `@bolt-flow/plugin-export` | Versioned JSON import, export, browser download | Core peer only |
+| `bolt-flow-core` | Serializable document, subscriptions, commands, plugin lifecycle | None |
+| `bolt-flow-react` | Provider, hooks, controlled canvas, tool/overlay/renderer slots | React peers, `@xyflow/react` |
+| `bolt-flow-plugin-draw` | Native ink, custom shapes/fonts, smart edges, attached annotations and comments | `perfect-freehand`, `lucide-react`, `@fontsource/gochi-hand`; core, React adapter, XYFlow and React peers |
+| `bolt-flow-plugin-history` | Bounded undo/redo and grouped edits | Core peer only |
+| `bolt-flow-plugin-layout` | Directional Dagre graph layout | `@dagrejs/dagre` |
+| `bolt-flow-plugin-storage` | Debounced local persistence and adapter interface | Core peer only |
+| `bolt-flow-plugin-export` | Versioned JSON import, export, browser download | Core peer only |
 
 The root workspace installs **all** packages to develop the complete demo. A consumer installs just its selected packages. Enabling a demo plugin loads a bundled JavaScript chunk; it does **not** run npm or execute arbitrary remote packages. Disabling a plugin removes its registrations and listeners, but cannot unload already-evaluated JavaScript from browser memory.
 
@@ -50,9 +50,9 @@ Drawing tools belong to one optional native package, not individually downloadab
 Run `npm install` from this repository root to link the workspaces. The playground aliases local package source for development; run `npm run build:packages` before consuming package ESM/declaration exports from another local workspace application. The following example targets those local packages; registry availability is not assumed.
 
 ```tsx
-import { BoltRuntime, createDocument } from '@bolt-flow/core';
-import { BoltProvider, BoltCanvas } from '@bolt-flow/react';
-import '@bolt-flow/react/style.css';
+import { BoltRuntime, createDocument } from 'bolt-flow-core';
+import { BoltProvider, BoltCanvas } from 'bolt-flow-react';
+import 'bolt-flow-react/style.css';
 
 // Create once per editor instance, not on every React render.
 const runtime = new BoltRuntime(createDocument({
@@ -78,7 +78,7 @@ export function Editor() {
 // Call runtime.dispose() when its owning editor is permanently destroyed.
 ```
 
-Import `@bolt-flow/react/style.css` explicitly. It currently includes `@xyflow/react/dist/style.css` through a CSS `@import`; if your CSS pipeline does not resolve that import, include `@xyflow/react/dist/style.css` explicitly as well. Built drawing consumers must also import `@bolt-flow/plugin-draw/style.css`; do not rely on the playground's source imports to supply packaged CSS.
+Import `bolt-flow-react/style.css` explicitly. It currently includes `@xyflow/react/dist/style.css` through a CSS `@import`; if your CSS pipeline does not resolve that import, include `@xyflow/react/dist/style.css` explicitly as well. Built drawing consumers must also import `bolt-flow-plugin-draw/style.css`; do not rely on the playground's source imports to supply packaged CSS.
 
 Drawing CSS imports `@fontsource/gochi-hand/latin-400.css` from the plugin's direct Fontsource dependency to self-host Gochi Hand. If your pipeline does not resolve package CSS `@import`s, import that font CSS separately too and ensure the package is resolvable by your app (declare it directly if required by your resolver). Custom fonts are loaded by host CSS, not by registering a family string.
 
@@ -91,7 +91,7 @@ These defaults are React props, not automatically saved document settings. The p
 ## Add optional features
 
 ```ts
-import { historyPlugin } from '@bolt-flow/plugin-history';
+import { historyPlugin } from 'bolt-flow-plugin-history';
 
 runtime.use(historyPlugin({ limit: 80, mergeWindow: 500 }));
 runtime.execute('history.undo');
@@ -99,7 +99,7 @@ runtime.execute('history.redo');
 
 // Static import expressions let bundlers produce optional feature chunks.
 await runtime.load('layout', async () => {
-  const { layoutPlugin } = await import('@bolt-flow/plugin-layout');
+  const { layoutPlugin } = await import('bolt-flow-plugin-layout');
   return layoutPlugin({ direction: 'LR', nodeGap: 70, rankGap: 90 });
 });
 runtime.execute('layout.arrange', { direction: 'TB' });
@@ -110,10 +110,10 @@ runtime.remove('layout');
 
 ```ts
 // Required explicitly for consumers of the built drawing package.
-import '@bolt-flow/plugin-draw/style.css';
+import 'bolt-flow-plugin-draw/style.css';
 
 await runtime.load('draw', async () => {
-  const { drawPlugin } = await import('@bolt-flow/plugin-draw');
+  const { drawPlugin } = await import('bolt-flow-plugin-draw');
   return drawPlugin({
     defaults: { color: '#7963d2', size: 3, smartConnect: true },
     tools: ['pen', 'rectangle', 'ellipse', 'diamond', 'line', 'arrow', 'text', 'comment', 'eraser'],
@@ -155,8 +155,8 @@ Removing drawing unregisters its UI/commands, not saved objects. Missing node re
 ### Persistence and export
 
 ```ts
-import { storagePlugin } from '@bolt-flow/plugin-storage';
-import { exportPlugin } from '@bolt-flow/plugin-export';
+import { storagePlugin } from 'bolt-flow-plugin-storage';
+import { exportPlugin } from 'bolt-flow-plugin-export';
 
 runtime.use(storagePlugin({
   key: 'my-app:canvas:123',
@@ -178,7 +178,7 @@ Import/export and storage serialize the complete validated schema-version-1 docu
 ## Write a plugin
 
 ```ts
-import type { BoltPlugin } from '@bolt-flow/core';
+import type { BoltPlugin } from 'bolt-flow-core';
 
 export function renamePlugin(): BoltPlugin {
   return {
@@ -234,13 +234,13 @@ npm audit
 - `tsup` emits ESM, declaration files, and source maps for each package.
 - Vite builds the playground. Measure generated bundles rather than inferring bundle size or performance from optional loading.
 
-Preview the built demo with `npm run preview -w @bolt-flow/playground`.
+Preview the built demo with `npm run preview -w bolt-flow-playground`.
 
 ## Publishing checklist
 
-1. Confirm ownership of the npm scope and choose the final package names.
+1. Confirm ownership of the npm package names and choose the final package names.
 2. Run type checks, unit/browser tests, production builds, and dependency audits.
-3. Inspect `npm pack --dry-run -w @bolt-flow/core` and every other package.
+3. Inspect `npm pack --dry-run -w bolt-flow-core` and every other package.
 4. Only with explicit authorization, publish core first, React second, then individual plugins after reviewing generated artifacts.
 5. Add release automation, changelogs, compatibility/version policy, and registry metadata before wider adoption.
 

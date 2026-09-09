@@ -1,5 +1,5 @@
 {
-  "name": "@bolt-flow/plugin-draw",
+  "name": "bolt-flow-plugin-draw",
   "version": "0.1.0",
   "description": "Native freehand, shapes, smart connectors and anchored comments on a single React Flow canvas",
   "type": "module",
@@ -21,7 +21,7 @@
     "./style.css": "./src/style.css"
   },
   "scripts": {
-    "build": "tsup src/index.ts --format esm --dts --sourcemap --clean --external @bolt-flow/core --external @bolt-flow/react --external @xyflow/react --external react --external react-dom --external perfect-freehand"
+    "build": "tsup src/index.ts --format esm --dts --sourcemap --clean --external bolt-flow-core --external bolt-flow-react --external @xyflow/react --external react --external react-dom --external perfect-freehand"
   },
   "dependencies": {
     "@fontsource/gochi-hand": "^5.3.0",
@@ -29,8 +29,8 @@
     "perfect-freehand": "^1.2.2"
   },
   "peerDependencies": {
-    "@bolt-flow/core": "^0.1.0",
-    "@bolt-flow/react": "^0.1.0",
+    "bolt-flow-core": "^0.1.0",
+    "bolt-flow-react": "^0.1.0",
     "@xyflow/react": "^12.11.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"

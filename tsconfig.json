@@ -12,9 +12,9 @@
     "isolatedModules": true,
     "noEmit": true,
     "paths": {
-      "@bolt-flow/core": ["./packages/core/src/index.ts"],
-      "@bolt-flow/react": ["./packages/react/src/index.tsx"],
-      "@bolt-flow/plugin-*": ["./packages/plugin-*/src/index.ts"]
+      "bolt-flow-core": ["./packages/core/src/index.ts"],
+      "bolt-flow-react": ["./packages/react/src/index.tsx"],
+      "bolt-flow-plugin-*": ["./packages/plugin-*/src/index.ts"]
     }
   },
   "include": ["packages", "apps", "tests", "vitest.config.ts", "playwright.config.ts"]

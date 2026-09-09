@@ -1,4 +1,4 @@
-import { validateDocument, type BoltPlugin } from '@bolt-flow/core';
+import { validateDocument, type BoltPlugin } from 'bolt-flow-core';
 
 export interface StorageAdapter { getItem(key: string): string | null; setItem(key: string, value: string): void }
 export interface StorageOptions { key?: string; debounce?: number; storage?: StorageAdapter; onError?: (error: unknown) => void }

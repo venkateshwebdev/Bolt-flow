@@ -1,5 +1,5 @@
 import type { ComponentType, ReactNode } from 'react';
-import type { BoltNode } from '@bolt-flow/core';
+import type { BoltNode } from 'bolt-flow-core';
 
 export interface DrawFont { id: string; label: string; family: string }
 export const defaultFonts: DrawFont[] = [

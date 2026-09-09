@@ -1,4 +1,4 @@
-# @bolt-flow/react
+# bolt-flow-react
 
 Composable React 19 bindings for one React Flow canvas containing workflow nodes and optional native annotations. Alpha 0.1.0; unpublished, with validation ongoing. Use local npm workspaces and build package exports as described in the [root README](../../README.md).
 
@@ -6,7 +6,7 @@ Composable React 19 bindings for one React Flow canvas containing workflow nodes
 
 Exports `BoltProvider`, `BoltCanvas`, `BoltTools`, `useBolt`, `useBoltSnapshot`, `CanvasToolProps`, `CanvasExtension`, `BoltCanvasProps`, and selected XYFlow primitives/types. Wrap the canvas in `BoltProvider` with a stable `BoltRuntime` and an explicitly sized parent. Dispose the runtime when its owning editor is permanently destroyed.
 
-Import `@bolt-flow/react/style.css` explicitly. It currently includes `@xyflow/react/dist/style.css` via CSS `@import`; if that import is not resolved by your CSS pipeline, import `@xyflow/react/dist/style.css` explicitly too. Consumers of the built optional drawing package must also import `@bolt-flow/plugin-draw/style.css`. Source-aliased playground behavior is not a substitute for consumer CSS setup.
+Import `bolt-flow-react/style.css` explicitly. It currently includes `@xyflow/react/dist/style.css` via CSS `@import`; if that import is not resolved by your CSS pipeline, import `@xyflow/react/dist/style.css` explicitly too. Consumers of the built optional drawing package must also import `bolt-flow-plugin-draw/style.css`. Source-aliased playground behavior is not a substitute for consumer CSS setup.
 
 Drawing CSS imports `@fontsource/gochi-hand/latin-400.css` from the drawing plugin's direct dependency for self-hosted handwriting. If your pipeline does not resolve package CSS `@import`s, import that font CSS separately and make the dependency resolvable from the host app (declare it directly if necessary). Custom font faces are loaded by host CSS. The React adapter itself does not depend on Fontsource or drawing.
 

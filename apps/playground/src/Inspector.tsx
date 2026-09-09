@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Check, Copy, Link2, MessageCircle, SlidersHorizontal, Sparkles, Trash2, Unlink, X } from 'lucide-react';
-import { useBolt, useBoltSnapshot } from '@bolt-flow/react';
-import type { BoltNode, BoltEdge, BoltStyle, Json } from '@bolt-flow/core';
-import type { DrawFont } from '@bolt-flow/plugin-draw';
+import { useBolt, useBoltSnapshot } from 'bolt-flow-react';
+import type { BoltNode, BoltEdge, BoltStyle, Json } from 'bolt-flow-core';
+import type { DrawFont } from 'bolt-flow-plugin-draw';
 import { appearanceOf, appearanceDefaults, nodeStyle, edgeStyle, type Appearance } from './appearance';
 
 // Keep the inspector usable without loading the optional drawing package.

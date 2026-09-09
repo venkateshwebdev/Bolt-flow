@@ -1,4 +1,4 @@
-# @bolt-flow/plugin-layout
+# bolt-flow-plugin-layout
 
 Optional Dagre layout for Bolt Flow. Alpha 0.1.0; unpublished, with validation ongoing. Use the local npm workspaces described in the [root README](../../README.md).
 

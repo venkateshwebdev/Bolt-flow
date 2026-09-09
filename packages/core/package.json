@@ -1,5 +1,5 @@
 {
-  "name": "@bolt-flow/core",
+  "name": "bolt-flow-core",
   "version": "0.1.0",
   "description": "Headless document and plugin runtime for Bolt Flow",
   "type": "module",

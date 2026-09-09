@@ -1,4 +1,4 @@
-# @bolt-flow/core
+# bolt-flow-core
 
 Dependency-free, framework-independent Bolt Flow document and plugin runtime. ESM and TypeScript declarations. Alpha 0.1.0; unpublished, with validation ongoing. Use the local npm workspaces described in the [root README](../../README.md).
 

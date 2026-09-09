@@ -1,5 +1,5 @@
 import dagre from '@dagrejs/dagre';
-import type { BoltPlugin } from '@bolt-flow/core';
+import type { BoltPlugin } from 'bolt-flow-core';
 
 export interface LayoutOptions { direction?: 'LR' | 'TB' | 'RL' | 'BT'; nodeGap?: number; rankGap?: number }
 export function layoutPlugin(defaults: LayoutOptions = {}): BoltPlugin {

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { BoltRuntime } from '@bolt-flow/core';
+import { BoltRuntime } from 'bolt-flow-core';
 import { historyPlugin } from './index';
 
 describe('history plugin', () => {

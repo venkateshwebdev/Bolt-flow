@@ -1,14 +1,14 @@
-# @bolt-flow/plugin-draw
+# bolt-flow-plugin-draw
 
 Independent optional native drawing and local-comment plugin on the **same React Flow canvas** as workflow nodes. Uses the public perfect-freehand API for pressure-aware pen outlines; no Excalidraw dependency or separate editor. Alpha 0.1.0; unpublished, with validation ongoing. Use the local npm workspaces in the [root README](../../README.md).
 
 ## Integration
 
-Register `drawPlugin(options)` directly or through `runtime.load('draw', async () => (await import('@bolt-flow/plugin-draw')).drawPlugin(options))`. Use static, trusted loaders so bundlers can split optional code. Core and the React adapter never import drawing by default.
+Register `drawPlugin(options)` directly or through `runtime.load('draw', async () => (await import('bolt-flow-plugin-draw')).drawPlugin(options))`. Use static, trusted loaders so bundlers can split optional code. Core and the React adapter never import drawing by default.
 
 Inside `BoltProvider`, render `BoltTools` with a host-controlled `CanvasToolProps` object and pass the same object to `BoltCanvas` through `interaction`. Use `tool: 'draw.pen'` (or another `draw.*` tool), JSON `options`, and state callbacks `onToolChange` / `onOptionsChange`; `onCreated(id, kind)` and `onMessage` are optional. Use prefixed IDs such as `draw.triangle` for interaction state, but raw IDs such as `triangle` in plugin `tools` and `draw.create.shape`. Shape definitions belong in plugin configuration, never in JSON interaction options. `select` / `pan` are host modes; the adapter defaults drag-to-pan to explicit `pan`, with React Flow prop overrides available.
 
-**CSS must be explicit for built consumers:** import `@bolt-flow/react/style.css` and `@bolt-flow/plugin-draw/style.css`. React CSS currently imports `@xyflow/react/dist/style.css`; import XYFlow CSS separately if your pipeline does not resolve it. The playground's source-level drawing CSS import does not guarantee built JavaScript consumers receive that CSS. Give the canvas parent an explicit size.
+**CSS must be explicit for built consumers:** import `bolt-flow-react/style.css` and `bolt-flow-plugin-draw/style.css`. React CSS currently imports `@xyflow/react/dist/style.css`; import XYFlow CSS separately if your pipeline does not resolve it. The playground's source-level drawing CSS import does not guarantee built JavaScript consumers receive that CSS. Give the canvas parent an explicit size.
 
 Drawing CSS imports `@fontsource/gochi-hand/latin-400.css`. Fontsource Gochi Hand is a direct plugin dependency, serving the handwritten font from local assets rather than a remote font service. If your pipeline does not resolve package CSS `@import`s, also import `@fontsource/gochi-hand/latin-400.css` explicitly in your application and ensure that package is resolvable there (declare it directly if your dependency resolver requires it). Keep font files and their upstream license/notices with distributed assets. Custom font faces must be loaded by host CSS; a font-family string alone does not download a font.
 
@@ -31,9 +31,9 @@ The plugin contributes `bolt-drawing` / `bolt-comment` to `canvas.nodeTypes`, th
 Configure once when registering the plugin on an existing runtime:
 
 ```ts
-import { drawPlugin, type DrawShapeDefinition } from '@bolt-flow/plugin-draw';
-import '@bolt-flow/react/style.css';
-import '@bolt-flow/plugin-draw/style.css';
+import { drawPlugin, type DrawShapeDefinition } from 'bolt-flow-plugin-draw';
+import 'bolt-flow-react/style.css';
+import 'bolt-flow-plugin-draw/style.css';
 
 const triangle: DrawShapeDefinition = {
 	id: 'triangle',

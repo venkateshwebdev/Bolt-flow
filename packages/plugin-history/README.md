@@ -1,4 +1,4 @@
-# @bolt-flow/plugin-history
+# bolt-flow-plugin-history
 
 Optional bounded undo/redo for the Bolt Flow document. Alpha 0.1.0; unpublished, with validation ongoing. Use the local npm workspaces described in the [root README](../../README.md).
 

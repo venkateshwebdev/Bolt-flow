@@ -1,5 +1,5 @@
 import { Database, Triangle } from 'lucide-react';
-import type { DrawPluginOptions } from '@bolt-flow/plugin-draw';
+import type { DrawPluginOptions } from 'bolt-flow-plugin-draw';
 
 // Loaded with the optional drawing plugin, not with the initial playground.
 export const drawOptions = {

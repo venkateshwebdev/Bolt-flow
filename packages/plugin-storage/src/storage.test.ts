@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { BoltRuntime, createDocument } from '@bolt-flow/core';
+import { BoltRuntime, createDocument } from 'bolt-flow-core';
 import { storagePlugin } from './index';
 
 afterEach(() => vi.useRealTimers());

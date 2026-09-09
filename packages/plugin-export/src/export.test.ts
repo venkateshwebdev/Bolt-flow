@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { BoltRuntime, createDocument } from '@bolt-flow/core';
+import { BoltRuntime, createDocument } from 'bolt-flow-core';
 import { exportPlugin } from './index';
 
 describe('document exchange', () => {

@@ -19,7 +19,7 @@ Bolt Flow is an unpublished 0.1.0 npm-workspace alpha. The current implementatio
 - Optional shared document history, Dagre layout excluding annotations, local persistence, and JSON exchange. Free annotations stay put during layout; attached annotations follow owners.
 - Validation and preservation of unknown JSON extensions. Legacy `extensions.excalidraw` scenes remain opaque: not rendered or migrated.
 - Playground inspectors, plugin library, commands, templates, themes, layers, and local review UI. Flow/Draw chooses tools, not separate surfaces. [Drawing configuration](../apps/playground/src/drawing.tsx) (Triangle, Database, Editorial font stack, palette/defaults) is lazily imported alongside the optional plugin.
-- Explicit consumer CSS: `@bolt-flow/react/style.css` (currently imports `@xyflow/react/dist/style.css`; import XYFlow CSS separately if not resolved) and `@bolt-flow/plugin-draw/style.css` for built drawing consumers. Drawing CSS imports `@fontsource/gochi-hand/latin-400.css` from a direct dependency. Import that font CSS separately too if the host pipeline does not resolve package CSS `@import`s, ensuring host package resolution. Custom font faces remain the host's responsibility.
+- Explicit consumer CSS: `bolt-flow-react/style.css` (currently imports `@xyflow/react/dist/style.css`; import XYFlow CSS separately if not resolved) and `bolt-flow-plugin-draw/style.css` for built drawing consumers. Drawing CSS imports `@fontsource/gochi-hand/latin-400.css` from a direct dependency. Import that font CSS separately too if the host pipeline does not resolve package CSS `@import`s, ensuring host package resolution. Custom font faces remain the host's responsibility.
 
 ## Next — Stabilize the native contracts (planned)
 

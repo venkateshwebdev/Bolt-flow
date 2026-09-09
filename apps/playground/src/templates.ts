@@ -1,4 +1,4 @@
-import { createDocument, type BoltDocument, type BoltNode } from '@bolt-flow/core';
+import { createDocument, type BoltDocument, type BoltNode } from 'bolt-flow-core';
 
 function node(id: string, label: string, description: string, x: number, y: number, kind: string, tag: string, accent: string): BoltNode {
   return { id, type: 'bolt', position: { x, y }, width: 240, height: 148, data: { label, description, kind, tag, accent } };

@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest';
-import { BoltRuntime } from '@bolt-flow/core';
+import { BoltRuntime } from 'bolt-flow-core';
 import { drawPlugin, defaultFonts, type DrawResult } from './index';
 
 it('registers custom shapes and stores portable fallback geometry with fonts', () => {

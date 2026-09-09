@@ -16,11 +16,11 @@ export default defineConfig({
   optimizeDeps: { include: ['perfect-freehand', '@dagrejs/dagre'] },
   resolve: {
     alias: [
-      { find: '@bolt-flow/react/style.css', replacement: source('react/src/style.css') },
-      { find: '@bolt-flow/core', replacement: source('core/src/index.ts') },
-      { find: '@bolt-flow/react', replacement: source('react/src/index.tsx') },
+      { find: 'bolt-flow-react/style.css', replacement: source('react/src/style.css') },
+      { find: 'bolt-flow-core', replacement: source('core/src/index.ts') },
+      { find: 'bolt-flow-react', replacement: source('react/src/index.tsx') },
       ...['draw', 'history', 'layout', 'storage', 'export'].map((id) => ({
-        find: `@bolt-flow/plugin-${id}`, replacement: source(`plugin-${id}/src/index.ts`),
+        find: `bolt-flow-plugin-${id}`, replacement: source(`plugin-${id}/src/index.ts`),
       })),
     ],
     dedupe: ['react', 'react-dom', '@xyflow/react'],

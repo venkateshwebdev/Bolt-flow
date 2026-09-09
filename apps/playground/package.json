@@ -1,10 +1,10 @@
 {
-  "name": "@bolt-flow/playground", "version": "0.1.0", "private": true, "type": "module",
+  "name": "bolt-flow-playground", "version": "0.1.0", "private": true, "type": "module",
   "scripts": { "dev": "vite --host 127.0.0.1", "build": "vite build", "preview": "vite preview --host 127.0.0.1" },
   "dependencies": {
-    "@bolt-flow/core": "^0.1.0", "@bolt-flow/react": "^0.1.0",
-    "@bolt-flow/plugin-draw": "^0.1.0", "@bolt-flow/plugin-history": "^0.1.0",
-    "@bolt-flow/plugin-layout": "^0.1.0", "@bolt-flow/plugin-storage": "^0.1.0", "@bolt-flow/plugin-export": "^0.1.0",
+    "bolt-flow-core": "^0.1.0", "bolt-flow-react": "^0.1.0",
+    "bolt-flow-plugin-draw": "^0.1.0", "bolt-flow-plugin-history": "^0.1.0",
+    "bolt-flow-plugin-layout": "^0.1.0", "bolt-flow-plugin-storage": "^0.1.0", "bolt-flow-plugin-export": "^0.1.0",
     "react": "^19.2.0", "react-dom": "^19.2.0", "lucide-react": "^0.468.0"
   }
 }

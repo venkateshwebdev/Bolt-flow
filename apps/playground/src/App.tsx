@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { createDocument, type BoltPlugin, type Json } from '@bolt-flow/core';
-import { BoltCanvas, BoltTools, Handle, Position, useBolt, useBoltSnapshot, useReactFlow, type NodeProps, type Node, type CanvasToolProps } from '@bolt-flow/react';
+import { createDocument, type BoltPlugin, type Json } from 'bolt-flow-core';
+import { BoltCanvas, BoltTools, Handle, Position, useBolt, useBoltSnapshot, useReactFlow, type NodeProps, type Node, type CanvasToolProps } from 'bolt-flow-react';
 import { ArrowRight, ArrowUpRight, BookOpen, Box, Check, ChevronRight, CircleHelp, Code2, Command, Download, Focus, FolderOpen, GitBranch, Grid2X2, Hand, History, Layers, Lightbulb, Link2, MessageCircle, Minus, Moon, MousePointer2, Palette, PanelRight, Pencil, Plus, Puzzle, Redo2, Rocket, Search, Shapes, SlidersHorizontal, Sparkles, Sun, Undo2, Upload, Workflow, X, Zap, type LucideIcon } from 'lucide-react';
 import { architectureTemplate, launchTemplate } from './templates';
 import { Inspector } from './Inspector';
@@ -20,13 +20,13 @@ const nodeTypes = { bolt: FlowCard };
 type PluginId = 'draw' | 'history' | 'layout' | 'storage' | 'export';
 const catalog: { id: PluginId; name: string; description: string; icon: LucideIcon; color: string; loader: () => Promise<BoltPlugin> }[] = [
   { id: 'draw', name: 'Connected ink', description: 'Draw, comment, attach context, and turn ink into real workflow connections. One canvas.', icon: Pencil, color: 'pink', loader: async () => {
-    const [{ drawPlugin }, { drawOptions }] = await Promise.all([import('@bolt-flow/plugin-draw'), import('./drawing')]);
+    const [{ drawPlugin }, { drawOptions }] = await Promise.all([import('bolt-flow-plugin-draw'), import('./drawing')]);
     return drawPlugin({ ...drawOptions, toFlowNode: (node) => ({ type: 'bolt', width: 240, height: 148, data: { label: String(node.data.label), description: 'Promoted from a canvas annotation.', kind: 'idea', tag: 'FROM SKETCH TO STEP', accent: 'purple' } }) });
   } },
-  { id: 'layout', name: 'Smart layout', description: 'Arrange workflow steps automatically. Attached sketches and comments follow their owners.', icon: Workflow, color: 'blue', loader: async () => (await import('@bolt-flow/plugin-layout')).layoutPlugin() },
-  { id: 'history', name: 'Time machine', description: 'One undo history for workflow edits, ink, comments, styles, and layout.', icon: History, color: 'purple', loader: async () => (await import('@bolt-flow/plugin-history')).historyPlugin() },
-  { id: 'storage', name: 'Local autosave', description: 'Keep this document and its annotations in your browser. No cloud account.', icon: FolderOpen, color: 'green', loader: async () => (await import('@bolt-flow/plugin-storage')).storagePlugin({ key: 'bolt-flow:playground:v1' }) },
-  { id: 'export', name: 'Portable canvas', description: 'Import and export your graph, drawings, discussions, and styles together as JSON.', icon: Download, color: 'orange', loader: async () => (await import('@bolt-flow/plugin-export')).exportPlugin() },
+  { id: 'layout', name: 'Smart layout', description: 'Arrange workflow steps automatically. Attached sketches and comments follow their owners.', icon: Workflow, color: 'blue', loader: async () => (await import('bolt-flow-plugin-layout')).layoutPlugin() },
+  { id: 'history', name: 'Time machine', description: 'One undo history for workflow edits, ink, comments, styles, and layout.', icon: History, color: 'purple', loader: async () => (await import('bolt-flow-plugin-history')).historyPlugin() },
+  { id: 'storage', name: 'Local autosave', description: 'Keep this document and its annotations in your browser. No cloud account.', icon: FolderOpen, color: 'green', loader: async () => (await import('bolt-flow-plugin-storage')).storagePlugin({ key: 'bolt-flow:playground:v1' }) },
+  { id: 'export', name: 'Portable canvas', description: 'Import and export your graph, drawings, discussions, and styles together as JSON.', icon: Download, color: 'orange', loader: async () => (await import('bolt-flow-plugin-export')).exportPlugin() },
 ];
 const preferencesKey = 'bolt-flow:playground:plugins';
 function remember(ids: string[]) { try { localStorage.setItem(preferencesKey, JSON.stringify(ids)); } catch { /* Noncritical preferences only. */ } }

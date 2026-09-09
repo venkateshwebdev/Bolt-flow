@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { BoltRuntime, createDocument } from '@bolt-flow/core';
+import { BoltRuntime, createDocument } from 'bolt-flow-core';
 import { layoutPlugin } from './index';
 
 describe('layout plugin', () => {

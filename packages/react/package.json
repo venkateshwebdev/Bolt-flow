@@ -1,5 +1,5 @@
 {
-  "name": "@bolt-flow/react",
+  "name": "bolt-flow-react",
   "version": "0.1.0",
   "description": "Composable React Flow canvas and React bindings for Bolt Flow",
   "type": "module",
@@ -9,8 +9,8 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" }, "./style.css": "./src/style.css" },
-  "scripts": { "build": "tsup src/index.tsx --format esm --dts --sourcemap --clean --external @bolt-flow/core --external @xyflow/react --external react --external react-dom" },
+  "scripts": { "build": "tsup src/index.tsx --format esm --dts --sourcemap --clean --external bolt-flow-core --external @xyflow/react --external react --external react-dom" },
   "dependencies": { "@xyflow/react": "^12.11.6" },
-  "peerDependencies": { "@bolt-flow/core": "^0.1.0", "react": "^19.0.0", "react-dom": "^19.0.0" },
+  "peerDependencies": { "bolt-flow-core": "^0.1.0", "react": "^19.0.0", "react-dom": "^19.0.0" },
   "publishConfig": { "access": "public" }
 }

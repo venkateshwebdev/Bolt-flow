@@ -1,6 +1,6 @@
-import type { BoltPlugin, BoltNode } from '@bolt-flow/core';
+import type { BoltPlugin, BoltNode } from 'bolt-flow-core';
 import { createElement } from 'react';
-import type { CanvasExtension, NodeTypes } from '@bolt-flow/react';
+import type { CanvasExtension, NodeTypes } from 'bolt-flow-react';
 import { DrawingNode, CommentNode, DrawingOverlay, DrawingTools } from './ui';
 import { defaultSettings, shapes, makeDrawing, findFlowNode, type DrawShape, type Sample, type InkSettings } from './geometry';
 import './style.css';

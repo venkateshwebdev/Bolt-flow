@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect, type PointerEvent } from 'react';
-import { useBolt, useBoltSnapshot, useReactFlow, useViewport, NodeResizer, type CanvasToolProps, type NodeProps } from '@bolt-flow/react';
-import type { BoltNode, Json } from '@bolt-flow/core';
+import { useBolt, useBoltSnapshot, useReactFlow, useViewport, NodeResizer, type CanvasToolProps, type NodeProps } from 'bolt-flow-react';
+import type { BoltNode, Json } from 'bolt-flow-core';
 import { inkPath, getSamples, makeDrawing, defaultSettings, findFlowNode, type Sample, type DrawShape, type InkSettings } from './geometry';
 import type { DrawResult } from './index';
 import { MousePointer2, Hand, Pencil, Square, Circle, Diamond, Minus, ArrowUpRight, Type, MessageSquare, Eraser, Shapes, SlidersHorizontal } from 'lucide-react';

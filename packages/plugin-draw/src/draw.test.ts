@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { BoltRuntime, createDocument, validateDocument } from '@bolt-flow/core';
+import { BoltRuntime, createDocument, validateDocument } from 'bolt-flow-core';
 import { drawPlugin, type DrawResult } from './index';
 import { defaultSettings, inkPath, makeDrawing } from './geometry';
 import { historyPlugin } from '../../plugin-history/src/index';

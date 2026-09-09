@@ -1,4 +1,4 @@
-import { validateDocument, type BoltPlugin } from '@bolt-flow/core';
+import { validateDocument, type BoltPlugin } from 'bolt-flow-core';
 
 export function exportPlugin({ maxImportBytes = 25 * 1024 * 1024 }: { maxImportBytes?: number } = {}): BoltPlugin {
   return {

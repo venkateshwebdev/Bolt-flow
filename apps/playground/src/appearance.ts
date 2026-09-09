@@ -1,4 +1,4 @@
-import type { BoltDocument, BoltStyle } from '@bolt-flow/core';
+import type { BoltDocument, BoltStyle } from 'bolt-flow-core';
 
 export interface Appearance {
   nodeBackground: string; nodeColor: string; nodeBorder: string; nodeRadius: number; nodeFont: number;
