@@ -1,0 +1,42 @@
+@import '@fontsource/gochi-hand/latin-400.css';
+
+.bolt-draw-overlay { position: absolute; inset: 0; z-index: 6; touch-action: none; cursor: crosshair; }
+.bolt-draw-overlay.is-eraser { cursor: cell; }
+.bolt-draw-preview { width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+.bolt-drawing-node { width: 100%; height: 100%; position: relative; border-radius: 4px; }
+.bolt-drawing-node.is-selected { outline: 1px dashed #ad97e0; outline-offset: 4px; }
+.bolt-ink-svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.bolt-ink-text { width: 100%; height: 100%; padding: 8px; white-space: pre-wrap; overflow-wrap: anywhere; overflow: hidden; font-family: inherit; }
+.bolt-anchor-badge { position: absolute; bottom: -22px; left: 0; font: 500 10px system-ui; background: #f0eafd; color: #7154b3; border-radius: 4px; padding: 3px 6px; white-space: nowrap; }
+.bolt-comment-node { width: 100%; height: 100%; background: #fffbed; color: #67532c; border: 1px solid #d7a540; border-radius: 12px; padding: 12px; box-shadow: 0 4px 12px #4335180a; display: flex; flex-direction: column; }
+.bolt-comment-node.is-selected { outline: 3px solid #e6d6fa; outline-offset: 2px; }
+.bolt-comment-node.is-resolved { background: #effaf3; border-color: #78ac94 !important; }
+.bolt-comment-node header { display: flex; align-items: center; justify-content: space-between; font-size: 9px; letter-spacing: .7px; }
+.bolt-comment-node header button { border: 1px solid #bda570; border-radius: 5px; background: #fff9; color: #67532c; cursor: pointer; width: 22px; height: 22px; }
+.bolt-comment-node p { margin: 8px 0; font-size: 13px; line-height: 1.5; overflow: hidden; overflow-wrap: anywhere; flex: 1; }
+.bolt-comment-node footer { display: flex; justify-content: space-between; font-size: 9px; color: #958055; }
+.bolt-draw-tools { background: var(--paper, #fff); color: var(--ink, #363342); border: 1px solid var(--line, #e8e5ef); border-radius: 14px; box-shadow: 0 6px 24px #19223514; overflow: hidden; }
+.bolt-draw-tool-row { display: flex; gap: 3px; overflow-x: auto; padding: 7px 10px; scrollbar-width: thin; }
+.bolt-draw-tool-row button { display: flex; flex: 0 0 34px; height: 34px; align-items: center; justify-content: center; border: 1px solid transparent; background: transparent; color: inherit; border-radius: 8px; padding: 7px; cursor: pointer; }
+.bolt-draw-tool-row button span { font-size: 19px; height: 22px; min-width: 18px; line-height: 22px; }
+.bolt-draw-tool-row button small { font: 500 11px system-ui; }
+.bolt-draw-tool-row button[aria-pressed='true'] { border-color: #cebdf1; color: #7553ba; background: #f0eafd; }
+.bolt-draw-settings { display: flex; align-items: center; gap: 12px; padding: 6px 12px 10px; flex-wrap: wrap; font: 11px system-ui; }
+.bolt-draw-settings label { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+.bolt-draw-settings input[type='color'] { width: 24px; height: 25px; padding: 0; border: 0; background: none; }
+.bolt-draw-settings input[type='range'] { width: 65px; accent-color: #7963d2; }
+.bolt-draw-settings select, .bolt-draw-content { color: inherit; background: var(--soft, #f8f7fc); border: 1px solid var(--line, #e5e0ee); border-radius: 5px; padding: 5px; font: inherit; }
+.bolt-anchor-picker select { max-width: 180px; }
+.bolt-draw-content { flex: 1; min-width: 190px; }
+.bolt-draw-quickbar { display: flex; align-items: center; gap: 12px; padding: 8px 13px; border-top: 1px solid var(--line, #e8e5ef); font: 11px system-ui; }
+.bolt-tool-caption { font-weight: 600; white-space: nowrap; }
+.bolt-tool-help { color: var(--muted, #667085); margin-left: auto; font-size: 10px; }
+.bolt-tool-divider { width: 1px; background: var(--line, #e8e5ef); margin: 5px 3px; flex-shrink: 0; }
+.bolt-color-swatches { display: flex; gap: 6px; }
+.bolt-color-swatches button { width: 16px; height: 16px; border: 2px solid var(--paper, #fff); outline: 1px solid transparent; border-radius: 50%; padding: 0; cursor: pointer; }
+.bolt-color-swatches button[aria-pressed='true'] { outline-color: currentColor; }
+.bolt-font-size { width: 52px; border: 1px solid var(--line, #e8e5ef); border-radius: 5px; padding: 5px; background: var(--soft, #f8f7fc); color: inherit; }
+.bolt-draw-settings { border-top: 1px solid var(--line, #e8e5ef); max-height: min(220px, 35dvh); overflow-y: auto; padding: 12px; }
+.bolt-draw-tools button:focus-visible { outline: 2px solid #7963d2; outline-offset: -2px; }
+@media (max-width: 699px) { .bolt-tool-help { display: none; } .bolt-draw-quickbar { justify-content: space-between; gap: 6px; } }
+@media (max-width: 600px) { .bolt-draw-tool-row button small { display: none; } .bolt-draw-settings { gap: 7px 10px; } .bolt-anchor-picker select { max-width: 150px; } .bolt-draw-content { flex-basis: 100%; } }

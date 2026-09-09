@@ -1,0 +1,14 @@
+@import '@xyflow/react/dist/style.css';
+
+.bolt-canvas { position: relative; width: 100%; height: 100%; min-height: 320px; --xy-background-color: #fafbfc; --xy-selection-background-color: #635bff0d; --xy-selection-border: 1px solid #7367db; }
+.bolt-canvas[data-theme='dark'] { --xy-background-color: #1b1e26; --xy-selection-background-color: #b6a4ff18; --xy-selection-border: 1px solid #b6a4ff; }
+.bolt-canvas[data-tool='select'] .react-flow__pane { cursor: default; }
+.bolt-canvas[data-tool='pan'] .react-flow__pane, .bolt-canvas[data-tool='pan'] .react-flow__node { cursor: grab; }
+.bolt-canvas[data-tool='pan'] .react-flow__pane.dragging, .bolt-canvas[data-tool='pan'] .react-flow__node:active { cursor: grabbing; }
+.bolt-canvas .react-flow__edge-path { stroke: #b3b2c9; stroke-width: 1.6; }
+.bolt-canvas .react-flow__edge.selected .react-flow__edge-path { filter: drop-shadow(0 0 3px #a886d299); }
+.bolt-canvas .react-flow__controls { box-shadow: 0 2px 5px #18223806, 0 8px 24px #1822380d; border: 1px solid var(--line, #e4e7ec); border-radius: 10px; overflow: hidden; }
+.bolt-canvas .react-flow__controls-button { background: var(--paper, #fff); color: var(--ink, #272b35); border-color: var(--line, #e4e7ec); }
+.bolt-canvas .react-flow__controls-button:hover { background: var(--soft, #f5f6f8); }
+.bolt-canvas .react-flow__controls-button:focus-visible { outline: 2px solid #7367db; outline-offset: -3px; }
+.bolt-canvas .react-flow__minimap { border: 1px solid #e7e7f0; border-radius: 12px; overflow: hidden; box-shadow: 0 3px 16px #22224406; }

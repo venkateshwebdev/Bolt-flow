@@ -1,0 +1,35 @@
+{
+  "name": "bolt-flow-workspace",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w @bolt-flow/playground",
+    "build:packages": "npm run build -w @bolt-flow/core && npm run build -w @bolt-flow/react && npm run build -w @bolt-flow/plugin-draw -w @bolt-flow/plugin-export -w @bolt-flow/plugin-history -w @bolt-flow/plugin-layout -w @bolt-flow/plugin-storage",
+    "build": "npm run build:packages && npm run build -w @bolt-flow/playground",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "test:consumer": "npm run build:packages && node tests/consumer/check.mjs",
+    "check": "npm run typecheck && npm test && npm run build"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^22.15.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.5.0",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5",
+    "vitest": "^4.1.11"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

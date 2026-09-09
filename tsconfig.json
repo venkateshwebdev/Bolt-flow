@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "paths": {
+      "@bolt-flow/core": ["./packages/core/src/index.ts"],
+      "@bolt-flow/react": ["./packages/react/src/index.tsx"],
+      "@bolt-flow/plugin-*": ["./packages/plugin-*/src/index.ts"]
+    }
+  },
+  "include": ["packages", "apps", "tests", "vitest.config.ts", "playwright.config.ts"]
+}
