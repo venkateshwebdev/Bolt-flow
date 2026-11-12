@@ -34,3 +34,4 @@ export function storagePlugin({ key = 'bolt-flow:document', debounce = 600, stor
     },
   };
 }
+export * from './controller';

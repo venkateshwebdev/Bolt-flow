@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "dev": "npm run dev -w bolt-flow-playground",
-    "build:packages": "npm run build -w bolt-flow-core && npm run build -w bolt-flow-react && npm run build -w bolt-flow-plugin-draw -w bolt-flow-plugin-export -w bolt-flow-plugin-history -w bolt-flow-plugin-layout -w bolt-flow-plugin-storage",
+    "build:packages": "npm run build -w bolt-flow-core && npm run build -w bolt-flow-react && npm run build -w bolt-flow-plugin-draw -w bolt-flow-plugin-export -w bolt-flow-plugin-history -w bolt-flow-plugin-layout -w bolt-flow-plugin-storage -w bolt-flow-plugin-image-export",
     "build": "npm run build:packages && npm run build -w bolt-flow-playground",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
@@ -20,10 +20,13 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",
+    "@types/babel__standalone": "^7.1.9",
     "@types/node": "^22.15.0",
+    "@types/prismjs": "^1.26.6",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^4.5.0",
+    "esbuild": "0.27.2",
     "tsup": "^8.5.0",
     "typescript": "^5.8.3",
     "vite": "^6.3.5",

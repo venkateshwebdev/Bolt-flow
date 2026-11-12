@@ -21,7 +21,7 @@
 - Local comments support replies and resolve/reopen, not multiplayer. Promotion uses `draw.convert` and configurable `toFlowNode`; smart arrows match nearby workflow endpoints to real graph edges, not reversible graph/sketch binding. Optional history covers all document changes together.
 - Register plugin resources through the context and clean up external listeners/timers on removal.
 - Removing drawing unregisters UI/commands, not saved objects. Missing renderers use placeholders until re-enabled.
-- Do not claim Excalidraw/full drawing-editor parity, images, rotation, full groups/subflows, multiplayer, canvas image export, or legacy scene migration. Native tools are one optional package, not separately downloadable tool packages.
+- Do not claim Excalidraw/full drawing-editor parity, images, rotation, full container groups/subflows, multiplayer, SVG export, or Excalidraw scene migration. Native tools are one optional package, not separately downloadable tool packages.
 - The user-supplied XYFlow Pro example was inspected for the concept only; code was not copied because of license restrictions. Drawing was implemented independently using the public perfect-freehand API. Do not copy restricted Pro example code.
 - Preserve React Flow attribution and applicable upstream licenses/notices (including perfect-freehand, Dagre, Lucide, Fontsource/Gochi Hand font assets, and retained legacy Excalidraw material). Do not describe Excalidraw as a current dependency or carry forward its obsolete override instructions.
 - Validate with `npm run typecheck`, `npm test`, `npm run test:e2e`, `npm run build`, and `npm audit`.
@@ -35,3 +35,8 @@
 - Source capabilities and planned work are distinguished in the roadmap. Earlier passing snapshots do not qualify future changes; no final validation results are recorded here.
 - Before release, review current typecheck/test/browser/build/audit results, built consumer CSS, declarations, package contents, licenses, scope ownership, and compatibility policy. Inspect each workspace with `npm pack --dry-run`.
 - No editor extensions are required. Package publishing and repository pushes remain separately authorized actions.
+## November customization contracts
+
+- Documents now use schema 2; validate/migrate schema 1 and preserve unknown extensions. Anchors may form acyclic annotation chains. Logical groups and hidden/locked flags persist.
+- New persistence defaults to manual; preserve legacy storagePlugin behavior. Never add implicit writes to the manual controller.
+- Public editor primitives, structured rich text, reference workflow canvas import, optional PNG export and editable waypoints are implemented; see [the guide](../docs/CUSTOMIZATION.md). Keep future services distinct from shipped features.

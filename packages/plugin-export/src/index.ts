@@ -1,13 +1,12 @@
-import { validateDocument, type BoltPlugin } from 'bolt-flow-core';
+import { parseCanvas, serializeCanvas, type BoltPlugin } from 'bolt-flow-core';
 
 export function exportPlugin({ maxImportBytes = 25 * 1024 * 1024 }: { maxImportBytes?: number } = {}): BoltPlugin {
   return {
     id: 'export', name: 'Portable canvas', version: '0.1.0',
     setup(context) {
-      context.registerCommand({ id: 'export.json', title: 'Export canvas as JSON', execute: () => JSON.stringify(context.getDocument(), null, 2) });
+      context.registerCommand({ id: 'export.json', title: 'Export canvas as JSON', execute: () => serializeCanvas(context.getDocument()) });
       context.registerCommand({ id: 'import.json', title: 'Import a canvas', execute(input: string) {
-        if (new TextEncoder().encode(input).length > maxImportBytes) throw new Error('This document exceeds the configured import size limit.');
-        const document = validateDocument(JSON.parse(input));
+        const document = parseCanvas(input, maxImportBytes);
         context.replaceDocument(document, { source: 'import' });
       } });
       context.registerCommand({ id: 'export.download', title: 'Download canvas', execute() {

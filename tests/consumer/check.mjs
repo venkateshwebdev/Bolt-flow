@@ -20,8 +20,8 @@ try {
   page.on('response', (response) => { if (/\.woff2?(\?|$)/.test(response.url())) fonts.push(response); });
   const address = server.httpServer.address();
   await page.goto(`http://127.0.0.1:${address.port}/`);
-  await page.locator('[data-drawing-shape="triangle"] path').waitFor();
-  assert.match(await page.locator('[data-drawing-shape="triangle"] path').getAttribute('d'), /M.*L.*Z/);
+  await page.locator('[data-drawing-shape="triangle"] path:not(.bolt-hit-target)').waitFor();
+  assert.match(await page.locator('[data-drawing-shape="triangle"] path:not(.bolt-hit-target)').getAttribute('d'), /M.*L.*Z/);
   const shape = await page.locator('[data-drawing-shape="triangle"] svg').getAttribute('viewBox');
   assert.equal(shape, '0 0 176 116'); // Original geometry scales inside the resized 300×180 node.
   await page.locator('.bolt-ink-text').waitFor();
@@ -29,6 +29,18 @@ try {
   assert.equal(await page.evaluate(async () => { const loaded = await document.fonts.load('22px "Gochi Hand"'); return loaded.length > 0 && document.fonts.check('22px "Gochi Hand"'); }), true);
   assert.ok(fonts.length > 0 && fonts.every((response) => response.ok()), 'Self-hosted font assets load successfully');
   assert.equal(await page.locator('.react-flow__node').first().evaluate((node) => getComputedStyle(node).position), 'absolute');
+  await page.getByRole('button', { name: 'Custom action', exact: true }).click();
+  await page.getByText('Host action ran', { exact: true }).first().waitFor();
+  assert.equal(await page.getByText('Host status panel').count(), 1);
+  const simple = page.locator('.simple-consumer');
+  await simple.scrollIntoViewIfNeeded();
+  await simple.getByText('Simple public API', { exact: true }).waitFor();
+  const area = await simple.locator('.bolt-canvas').boundingBox();
+  await page.mouse.move(area.x + 240, area.y + 200); await page.mouse.down();
+  await page.mouse.move(area.x + 380, area.y + 300); await page.mouse.up();
+  await simple.locator('[data-drawing-shape=pen]').waitFor();
+  await simple.getByRole('button', { name: 'Read simple JSON' }).click();
+  assert.equal(JSON.parse(await page.getByLabel('Simple JSON').innerText()).nodes.length, 2);
   assert.deepEqual(errors, []);
   console.log('Built consumer smoke passed: public CSS, local fonts, resized custom SVG fallback, no page errors.');
 } finally {

@@ -8,5 +8,5 @@ export default defineConfig({
       'bolt-flow-react': fileURLToPath(new URL('./packages/react/src/index.tsx', import.meta.url)),
     },
   },
-  test: { include: ['packages/**/*.test.ts'], coverage: { provider: 'v8' } },
+  test: { include: ['packages/**/*.test.ts', 'tests/docs-examples.test.ts'], coverage: { provider: 'v8' } },
 });

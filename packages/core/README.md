@@ -4,12 +4,12 @@ Dependency-free, framework-independent Bolt Flow document and plugin runtime. ES
 
 ## Document contract
 
-Exports `BoltRuntime`, `createDocument`, `validateDocument`, `syncAnchors`, and document, command, plugin, and context types. `BoltDocument` has `schemaVersion: 1`, `id`, `name`, `nodes`, `edges`, and `extensions`. Runtime snapshots are deeply frozen JSON data; update only drafts supplied to `updateDocument()`.
+Exports `BoltRuntime`, `createDocument`, `validateDocument`, `syncAnchors`, and document, command, plugin, and context types. `BoltDocument` has `schemaVersion: 2` (with version 1 JSON migration), `id`, `name`, `nodes`, `edges`, and `extensions`. Runtime snapshots are deeply frozen JSON data; update only drafts supplied to `updateDocument()`.
 
 - `BoltNode` includes `position`, `data`, dimensions, `type`, `role`, `anchor`, `style`, `className`, `zIndex`, and draggable/selectable/connectable flags.
 - `BoltEdge` includes endpoints/handles, routing type, label, animation, data, `style`, `labelStyle`, `labelBgStyle`, `className`, `zIndex`, and `markerStart` / `markerEnd`.
 - `BoltStyle` is a record of string/number values. Markers support `arrow` / `arrowclosed` with optional color and dimensions, or `false` to explicitly disable an inherited marker in the React adapter.
-- An `anchor` is `{ nodeId, offset: { x, y } }`. Its owner must exist, be a different node, and be neither anchored nor an annotation. `updateDocument()` calls `syncAnchors()` before validation: owner movement/layout moves attached nodes in the same transaction; owner deletion removes the anchor and preserves the annotation's current position. `replaceDocument()` validates supplied snapshots without synchronizing anchors.
+- An `anchor` is `{ nodeId, offset: { x, y } }`. Its owner must exist, be a different node, and not form a cycle; annotation owners and acyclic chains are supported. `updateDocument()` calls `syncAnchors()` before validation: owner movement/layout moves attached nodes in the same transaction; owner deletion removes the anchor and preserves the annotation's current position. `replaceDocument()` validates supplied snapshots without synchronizing anchors.
 - Validation rejects invalid/non-JSON data, duplicate IDs, dangling edges, and invalid anchors. Preserve unknown extension keys. Legacy `extensions.excalidraw` scenes remain opaque JSON, not rendered or migrated by core or the native drawing plugin.
 
 ## Plugins and boundaries
@@ -21,3 +21,8 @@ Core has no React, DOM, XYFlow, perfect-freehand, or Excalidraw dependency and i
 See the [root validation commands](../../README.md#validate-and-build). Whole-document cloning/validation/freezing and snapshot history need benchmarking before large-document guarantees.
 
 MIT © 2026 Bolt Flow contributors.
+## Customization contracts
+
+Exports `serializeCanvas`, `parseCanvas`, `captureCanvas`, `applyCanvas`, `insertCanvas`, `moveNodes`, `duplicateNodes`, `expandNodeSelection` and optional `editingPlugin`. Nodes support `hidden`, `locked` and `groupId`; documents optionally save `view`. Runtime `getDocumentRevision()` excludes plugin changes. `beforeCommand` and command `enabled` predicates support host policies.
+
+See the [integration guide](../../docs/CUSTOMIZATION.md) for JSON projection, migration, groups, commands and persistence. Logical groups are supported; transform/container groups remain future work.

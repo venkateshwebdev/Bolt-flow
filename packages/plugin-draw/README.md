@@ -72,7 +72,7 @@ Call these with `runtime.execute(commandId, payload)`:
 | Command | Payload | Behavior |
 | --- | --- | --- |
 | `draw.create` | `{ shape, points, settings? }` | Creates an annotation or smart edge; returns `{ id, kind: 'node' \| 'edge', connected? }`. Samples must contain finite flow-coordinate x/y/pressure values. |
-| `draw.attach` | `{ id, ownerId }` | Attaches an annotation to an unanchored non-annotation owner, preserving its offset. |
+| `draw.attach` | `{ id, ownerId }` | Attaches an annotation to a workflow or annotation owner in an acyclic chain, preserving its offset. |
 | `draw.detach` | Annotation ID | Removes its anchor without moving it. |
 | `draw.reply` | `{ id, text }` | Appends a nonempty local reply with generated ID and timestamp to a comment. |
 | `draw.resolve` | Comment ID | Toggles resolved/open state. |
@@ -91,10 +91,21 @@ Storage/export preserve native nodes, edges, anchors, replies, styles, and unkno
 
 ## Limits, provenance, and validation
 
-No multiplayer, authenticated discussions, images, rotation, full groups/subflows, frames, managed shape libraries, canvas image export, or Excalidraw/full drawing-editor parity. Host-defined shapes do not provide a shape-library browser or remote renderer execution. Long strokes and whole-document histories need performance and storage-quota review. No Excalidraw-era overrides are present in the current manifests; audit the actual installation instead of reusing obsolete overrides.
+No multiplayer, authenticated discussions, images, rotation, full container groups/subflows, frames, managed shape libraries, SVG export, or Excalidraw/full drawing-editor parity. Host-defined shapes do not provide a shape-library browser or remote renderer execution. Long strokes and whole-document histories need performance and storage-quota review. No Excalidraw-era overrides are present in the current manifests; audit the actual installation instead of reusing obsolete overrides.
 
 The user-supplied XYFlow Pro example was inspected for the concept only. Its code was not copied because of license restrictions. This is an independent implementation using perfect-freehand's public API, not a license to redistribute XYFlow Pro examples.
 
 Direct dependencies are perfect-freehand, Lucide React, and Fontsource Gochi Hand, with core, React adapter, XYFlow, React, and React DOM peers. See the [root validation commands and dated snapshot](../../README.md#validate-and-build). `npm run test:consumer` checks built exports, public CSS, local font loading, and resized custom geometry after removing its host definition. These checks do not establish production readiness.
 
 MIT © 2026 Bolt Flow contributors. Keep XYFlow/React Flow attribution and the upstream licenses/notices for perfect-freehand, Lucide, and Fontsource/Gochi Hand font assets. Excalidraw retains its license/trademarks as the previous integration; retain applicable notices with any legacy upstream material, without implying a current dependency.
+## Rich annotation tools
+
+Drawing now supports inline structured rich text, `opacity`, separate `textColor`, `auto` theme colors, selected-object actions, wider outline hit targets and optional Shift attachment. Owner pickers accept annotations as well as workflow nodes, with cycle validation. `toolbar` replaces/disables the default toolbar; host interaction options support `hiddenTools`, `toolOrder`, `palette` and `showAttachments`. Existing `tools` configuration remains the creation allowlist.
+
+Exports also include `RichText`, `TextRun`, normalization/plain-text/HTML conversion helpers and `importWorkflowCanvas` for the reference workflow's canvas v1. These do not implement Excalidraw migration. See [the guide](../../docs/CUSTOMIZATION.md#rich-drawing-and-routing) for behaviors, importer limits and supported editing gestures.
+
+### Fast pointer gestures
+
+Active strokes survive host rerenders and inline callback changes. Coalesced pointer samples and the final release position are preserved. Escape, actual tool changes, pointer cancellation, and capture loss cancel only the unfinished draft. Completed annotations remain part of the document and shared history.
+
+The documentation site's drawing guide includes editable sandboxes for every example: run the repository and open `/docs/drawing`.

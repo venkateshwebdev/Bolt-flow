@@ -2,6 +2,27 @@
 
 Composable React 19 bindings for one React Flow canvas containing workflow nodes and optional native annotations. Alpha 0.1.0; unpublished, with validation ongoing. Use local npm workspaces and build package exports as described in the [root README](../../README.md).
 
+## Start with BoltFlow
+
+```tsx
+import { BoltFlow } from 'bolt-flow-react';
+import 'bolt-flow-react/style.css';
+
+export function App() {
+  return <div style={{ height: 420 }}>
+    <BoltFlow defaultNodes={[
+      { id: 'start', position: { x: 80, y: 100 }, data: { label: 'Start' } },
+    ]} fitView fitViewOptions={{ maxZoom: 1 }} />
+  </div>;
+}
+```
+
+`BoltFlow` owns the provider/runtime lifecycle. It accepts familiar `nodes`, `edges`, `onNodesChange`, `onEdgesChange`, `onConnect`, custom renderers, viewport props, and React Flow children. Use `defaultNodes`/`defaultEdges` for internal state. Feature `plugins` are optional; `editor` opts into the full existing shell. A `BoltFlowRef` exposes `getDocument()`, `toJSON()`, `loadJSON(json)`, and the advanced `runtime`. `onDocumentChange` observes committed changes. Nothing saves automatically.
+
+Read the [complete React Flow-style API guide](../../docs/guide/react-flow.md), including controlled state, drawing, JSON saving, customization, and ownership. React Flow's `useNodesState`, `useEdgesState`, `addEdge`, `applyNodeChanges`, `applyEdgeChanges`, `Background`, `Controls`, `MiniMap`, `Panel`, and relevant types are reexported. Importing directly from `@xyflow/react` works too.
+
+The APIs below remain available for advanced applications that own or share a runtime.
+
 ## Setup and CSS
 
 Exports `BoltProvider`, `BoltCanvas`, `BoltTools`, `useBolt`, `useBoltSnapshot`, `CanvasToolProps`, `CanvasExtension`, `BoltCanvasProps`, and selected XYFlow primitives/types. Wrap the canvas in `BoltProvider` with a stable `BoltRuntime` and an explicitly sized parent. Dispose the runtime when its owning editor is permanently destroyed.
@@ -34,10 +55,15 @@ The playground starts Draw in **Select** and lazily loads its [custom shape/font
 
 Nodes and edges persist serializable `style` / `className`. Edges additionally support label styling, routing, animation, and markers. `markerStart: false` / `markerEnd: false` suppress inherited markers; undefined inherits them. Marker objects have `type: 'arrow' | 'arrowclosed'` and optional `color`, `width`, `height`. Defaults are React props, not automatically persisted: the playground saves its own settings in `extensions.appearance`.
 
-Custom `nodeTypes`, `edgeTypes`, and unmanaged React Flow props are supported. The adapter owns node/edge arrays and change/connect handlers. Controlled `selectedNodeIds` / `selectedEdgeIds` updates change selection separately from document synchronization, preserving current live drag positions rather than remapping saved positions on selection changes. Drag positions commit at drag end, while attached annotations follow live owner dragging; independently moved annotations update their offsets. Owner deletion detaches annotations through core synchronization. Optional history restores document snapshots, not transient selection or viewport state.
+Custom `nodeTypes`, `edgeTypes`, and unmanaged React Flow props are supported. `BoltFlow` supports controlled graph arrays and callbacks; the low-level provider/canvas API defaults to runtime ownership. Controlled `selectedNodeIds` / `selectedEdgeIds` updates change selection separately from document synchronization, preserving current live drag positions rather than remapping saved positions on selection changes. Drag positions commit at drag end, while attached annotations follow live owner dragging; independently moved annotations update their offsets. Owner deletion detaches annotations through core synchronization. Optional history restores document snapshots, not transient selection or viewport state.
 
 Only the portable `BoltNode` / `BoltEdge` contract is supported, not every XYFlow field or full groups/subflows. Custom renderers/host CSS determine visual styling. Unknown extensions, including legacy Excalidraw scenes, remain opaque and are not rendered or migrated. Requires core and React/React DOM peers, with XYFlow as a dependency; no Excalidraw dependency or parity claim. Images, rotation, multiplayer, and full drawing-editor features are outside the current contract.
 
 See the [root validation commands and dated snapshot](../../README.md#validate-and-build). Browser regressions cover viewport stability during Draw selection/dragging and inspector changes; the built-consumer check verifies public CSS without source aliases. Release qualification remains separate.
 
 MIT © 2026 Bolt Flow contributors. XYFlow retains its own license and attribution requirements.
+## Configurable editor components
+
+`BoltEditor`, `BoltToolbar`, `BoltLayers`, `BoltInspector`, `BoltSlot`, `editorUIPlugin`, `useBoltActions`, `useBoltShortcuts`, and `BoltWaypointEdge` are public exports. `editingPlugin` is re-exported for convenience and installed automatically only by `BoltFlow`. The optional shell supports replacement/hideable panels, host actions, CSS variables, controlled tools and canvas props. `BoltProvider readOnly` protects built-in editing commands/UI. `BoltCanvas readOnly` protects canvas interactions. Locked/hidden nodes and logical group selection are mapped to React Flow; chained anchors follow live drags.
+
+See [the customization guide](../../docs/CUSTOMIZATION.md) and the [built consumer example](../../tests/consumer/main.tsx).

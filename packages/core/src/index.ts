@@ -19,6 +19,9 @@ export interface BoltNode {
   draggable?: boolean;
   selectable?: boolean;
   connectable?: boolean;
+  hidden?: boolean;
+  locked?: boolean;
+  groupId?: string;
 }
 export interface BoltEdge {
   id: string;
@@ -39,22 +42,25 @@ export interface BoltEdge {
   zIndex?: number;
 }
 export interface BoltDocument {
-  schemaVersion: 1;
+  schemaVersion: 2;
   id: string;
   name: string;
   nodes: BoltNode[];
   edges: BoltEdge[];
   extensions: Record<string, Json>;
+  view?: { x: number; y: number; zoom: number };
 }
-export interface ChangeMeta { source?: string; history?: 'record' | 'ignore'; group?: string }
+export interface ChangeMeta { source?: string; history?: 'record' | 'ignore'; group?: string; transactionId?: string }
 export interface Command<T = unknown, R = unknown> {
   id: string;
   title: string;
   shortcut?: string;
+  enabled?: () => boolean | string;
   execute: (payload: T) => R;
 }
 export interface PluginContext {
   getDocument(): BoltDocument;
+  getDocumentRevision(): number;
   updateDocument(update: (draft: BoltDocument) => void, meta?: ChangeMeta): void;
   replaceDocument(document: BoltDocument, meta?: ChangeMeta): void;
   onDocumentChange(listener: DocumentListener): () => void;
@@ -74,10 +80,11 @@ export interface RuntimeSnapshot {
   plugins: readonly { id: string; name: string; version: string }[];
   commands: readonly { id: string; title: string; shortcut?: string }[];
   revision: number;
+  documentRevision: number;
 }
 
 export function createDocument(input: Partial<Omit<BoltDocument, 'schemaVersion'>> = {}): BoltDocument {
-  return validateDocument({ schemaVersion: 1, id: 'untitled', name: 'Untitled canvas', nodes: [], edges: [], extensions: {}, ...input });
+  return validateDocument({ schemaVersion: 2, id: 'untitled', name: 'Untitled canvas', nodes: [], edges: [], extensions: {}, ...input });
 }
 
 function isObject(value: unknown): value is Record<string, unknown> {
@@ -94,12 +101,24 @@ function validMarker(value: unknown) {
 /** Resolve attachments in the same transaction as a move/layout. Deleting an owner detaches its annotations. */
 export function syncAnchors(document: BoltDocument): void {
   const nodes = new Map(document.nodes.map((node) => [node.id, node]));
-  for (const node of document.nodes) {
-    if (!node.anchor) continue;
-    const owner = nodes.get(node.anchor.nodeId);
-    if (!owner) { delete node.anchor; continue; }
-    node.position = { x: owner.position.x + node.anchor.offset.x, y: owner.position.y + node.anchor.offset.y };
-  }
+  const done = new Set<string>();
+  const visiting = new Set<string>();
+  const resolve = (node: BoltNode) => {
+    if (done.has(node.id)) return;
+    if (visiting.has(node.id)) throw new Error('Cyclic annotation anchor.');
+    visiting.add(node.id);
+    if (node.anchor) {
+      const owner = nodes.get(node.anchor.nodeId);
+      if (!owner) delete node.anchor;
+      else {
+        resolve(owner);
+        node.position = { x: owner.position.x + node.anchor.offset.x, y: owner.position.y + node.anchor.offset.y };
+      }
+    }
+    visiting.delete(node.id);
+    done.add(node.id);
+  };
+  document.nodes.forEach(resolve);
 }
 function isJson(value: unknown, seen = new Set<object>()): value is Json {
   if (value === null || typeof value === 'string' || typeof value === 'boolean') return true;
@@ -113,19 +132,22 @@ function isJson(value: unknown, seen = new Set<object>()): value is Json {
 }
 /** Reject malformed imports before they can replace a live document. */
 export function validateDocument(value: unknown): BoltDocument {
-  if (!isObject(value) || !isJson(value) || value.schemaVersion !== 1 || typeof value.id !== 'string' || typeof value.name !== 'string' ||
+  if (!isObject(value) || !isJson(value) || (value.schemaVersion !== 1 && value.schemaVersion !== 2) || typeof value.id !== 'string' || typeof value.name !== 'string' ||
     !Array.isArray(value.nodes) || !Array.isArray(value.edges) || !isObject(value.extensions)) {
-    throw new Error('Invalid Bolt Flow document (expected schemaVersion 1).');
+    throw new Error('Invalid Bolt Flow document (expected schemaVersion 1 or 2).');
   }
+  if (value.view !== undefined && (!isObject(value.view) ||
+    ![value.view.x, value.view.y, value.view.zoom].every((n) => typeof n === 'number' && Number.isFinite(n)) || Number(value.view.zoom) <= 0)) throw new Error('Invalid saved viewport.');
   const ids = new Set<string>();
   for (const node of value.nodes) {
     if (!isObject(node) || typeof node.id !== 'string' || !node.id || ids.has(node.id) || !isObject(node.position) ||
       typeof node.position.x !== 'number' || !Number.isFinite(node.position.x) || typeof node.position.y !== 'number' || !Number.isFinite(node.position.y) ||
       !isObject(node.data) || (node.type !== undefined && typeof node.type !== 'string') ||
       !validStyle(node.style) || (node.className !== undefined && typeof node.className !== 'string') ||
+      (node.groupId !== undefined && (typeof node.groupId !== 'string' || !node.groupId)) ||
       (node.role !== undefined && !['node', 'annotation'].includes(String(node.role))) ||
       (node.zIndex !== undefined && typeof node.zIndex !== 'number') ||
-      [node.draggable, node.selectable, node.connectable].some((flag) => flag !== undefined && typeof flag !== 'boolean') ||
+      [node.draggable, node.selectable, node.connectable, node.hidden, node.locked].some((flag) => flag !== undefined && typeof flag !== 'boolean') ||
       [node.width, node.height].some((size) => size !== undefined && (typeof size !== 'number' || size <= 0))) {
       throw new Error('Invalid or duplicate node in document.');
     }
@@ -138,8 +160,18 @@ export function validateDocument(value: unknown): BoltDocument {
     const anchor = node.anchor;
     if (!isObject(anchor) || typeof anchor.nodeId !== 'string' || anchor.nodeId === node.id || !isObject(anchor.offset) ||
       typeof anchor.offset.x !== 'number' || typeof anchor.offset.y !== 'number' || !nodesById.has(anchor.nodeId) ||
-      nodesById.get(anchor.nodeId)?.anchor || nodesById.get(anchor.nodeId)?.role === 'annotation') throw new Error('Invalid annotation anchor.');
+      (value.schemaVersion === 1 && (nodesById.get(anchor.nodeId)?.anchor || nodesById.get(anchor.nodeId)?.role === 'annotation'))) throw new Error('Invalid annotation anchor.');
   }
+  const visiting = new Set<string>(), done = new Set<string>();
+  const checkChain = (id: string): void => {
+    if (done.has(id)) return;
+    if (visiting.has(id)) throw new Error('Cyclic annotation anchor.');
+    visiting.add(id);
+    const anchor = nodesById.get(id)?.anchor as BoltAnchor | undefined;
+    if (anchor) checkChain(anchor.nodeId);
+    visiting.delete(id); done.add(id);
+  };
+  for (const id of ids) checkChain(id);
   const edgeIds = new Set<string>();
   for (const edge of value.edges) {
     if (!isObject(edge) || typeof edge.id !== 'string' || !edge.id || edgeIds.has(edge.id) ||
@@ -155,7 +187,7 @@ export function validateDocument(value: unknown): BoltDocument {
     }
     edgeIds.add(edge.id);
   }
-  return structuredClone(value) as unknown as BoltDocument;
+  return { ...structuredClone(value), schemaVersion: 2 } as unknown as BoltDocument;
 }
 function freeze<T>(value: T): T {
   if (value && typeof value === 'object' && !Object.isFrozen(value)) {
@@ -167,6 +199,8 @@ function freeze<T>(value: T): T {
 
 export class BoltRuntime {
   private document: BoltDocument;
+  private documentRevision = 0;
+  private commandGuards = new Set<(id: string, payload: unknown) => boolean | string | void>();
   private plugins = new Map<string, { plugin: BoltPlugin; cleanup: (() => void)[] }>();
   private commands = new Map<string, Command>();
   private contributions = new Map<string, { token: symbol; value: unknown }[]>();
@@ -179,10 +213,25 @@ export class BoltRuntime {
   private setupMeta: ChangeMeta = {};
   constructor(document = createDocument(), private onError: (error: unknown) => void = console.error) {
     this.document = freeze(validateDocument(document));
-    this.snapshot = { document: this.document, plugins: [], commands: [], revision: 0 };
+    this.snapshot = { document: this.document, plugins: [], commands: [], revision: 0, documentRevision: 0 };
   }
   getSnapshot = (): RuntimeSnapshot => this.snapshot;
   getDocument = (): BoltDocument => this.document;
+  getDocumentRevision = (): number => this.documentRevision;
+  /** Host policy applies to every command entry point. Trusted direct draft mutations remain available. */
+  beforeCommand(guard: (id: string, payload: unknown) => boolean | string | void): () => void {
+    this.commandGuards.add(guard);
+    return () => { this.commandGuards.delete(guard); };
+  }
+  commandStatus(id: string, payload?: unknown): boolean | string {
+    const command = this.commands.get(id);
+    if (!command) return 'Command is unavailable.';
+    for (const guard of this.commandGuards) {
+      const result = guard(id, payload);
+      if (result === false || typeof result === 'string') return result;
+    }
+    return command.enabled?.() ?? true;
+  }
   subscribe = (listener: () => void): (() => void) => {
     this.assertActive();
     this.listeners.add(listener);
@@ -201,6 +250,7 @@ export class BoltRuntime {
       plugins: [...this.plugins.values()].map(({ plugin: { id, name, version } }) => ({ id, name, version })),
       commands: [...this.commands.values()].map(({ id, title, shortcut }) => ({ id, title, shortcut })),
       revision: this.snapshot.revision + 1,
+      documentRevision: this.documentRevision,
     };
     this.listeners.forEach((listener) => { try { listener(); } catch (error) { this.onError(error); } });
   }
@@ -222,6 +272,8 @@ export class BoltRuntime {
     this.emit();
   };
   private notifyDocument(next: BoltDocument, previous: BoltDocument, meta: ChangeMeta) {
+    this.documentRevision++;
+    meta = { ...meta, transactionId: meta.transactionId ?? `document-${this.documentRevision}` };
     this.documentListeners.forEach((listener) => {
       try { listener(next, previous, meta); } catch (error) { this.onError(error); }
     });
@@ -232,6 +284,8 @@ export class BoltRuntime {
     this.assertActive();
     const command = this.commands.get(id);
     if (!command) throw new Error(`Command "${id}" is unavailable. Enable its plugin first.`);
+    const status = this.commandStatus(id, payload);
+    if (status !== true) throw new Error(typeof status === 'string' ? status : 'This action is disabled.');
     return command.execute(payload) as R;
   }
   getContributions<T>(slot: string): T[] {
@@ -252,6 +306,7 @@ export class BoltRuntime {
     try {
       const teardown = plugin.setup({
         getDocument: this.getDocument,
+        getDocumentRevision: this.getDocumentRevision,
         updateDocument: this.updateDocument,
         replaceDocument: this.replaceDocument,
         onDocumentChange: (listener) => own(this.onDocumentChange(listener)),
@@ -306,8 +361,11 @@ export class BoltRuntime {
   dispose(): void {
     if (this.disposed) return;
     [...this.plugins.keys()].reverse().forEach((id) => this.remove(id));
+    this.commandGuards.clear();
     this.documentListeners.clear();
     this.listeners.clear();
     this.disposed = true;
   }
 }
+export * from './operations';
+export * from './serialization';

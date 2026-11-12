@@ -1,7 +1,7 @@
 import { createDocument, type BoltDocument, type BoltNode } from 'bolt-flow-core';
 
 function node(id: string, label: string, description: string, x: number, y: number, kind: string, tag: string, accent: string): BoltNode {
-  return { id, type: 'bolt', position: { x, y }, width: 240, height: 148, data: { label, description, kind, tag, accent } };
+  return { id, type: 'bolt', position: { x, y }, width: 190, height: 112, data: { label, description, kind, tag, accent } };
 }
 export function launchTemplate(): BoltDocument {
   return createDocument({ id: 'product-launch', name: 'Product launch', nodes: [

@@ -12,3 +12,37 @@
 .bolt-canvas .react-flow__controls-button:hover { background: var(--soft, #f5f6f8); }
 .bolt-canvas .react-flow__controls-button:focus-visible { outline: 2px solid #7367db; outline-offset: -3px; }
 .bolt-canvas .react-flow__minimap { border: 1px solid #e7e7f0; border-radius: 12px; overflow: hidden; box-shadow: 0 3px 16px #22224406; }
+.bolt-editor {
+  --bolt-surface: var(--paper, #fff); --bolt-text: var(--ink, #282534); --bolt-border: var(--line, #dedbe8); --bolt-accent: #7963d2; --bolt-radius: 8px; --bolt-space: 8px; --bolt-font: system-ui, sans-serif;
+  color: var(--bolt-text, var(--ink, #282534)); font-family: var(--bolt-font, system-ui, sans-serif);
+}
+.bolt-editor { display: flex; flex-direction: column; height: 100%; min-height: 480px; background: var(--bolt-surface, var(--paper, #fff)); border: 1px solid var(--bolt-border, #dedbe8); border-radius: var(--bolt-radius, 8px); overflow: hidden; }
+.bolt-editor header, .bolt-editor footer { padding: var(--bolt-space, 8px); border-bottom: 1px solid var(--bolt-border, #dedbe8); }
+.bolt-editor footer { border-top: 1px solid var(--bolt-border, #dedbe8); font-size: 12px; }
+.bolt-editor-body { display: flex; min-height: 0; flex: 1; }
+.bolt-editor-body > aside { width: 240px; flex-shrink: 0; overflow: auto; padding: var(--bolt-space, 8px); }
+.bolt-editor-body > main { flex: 1; min-width: 0; position: relative; }
+.bolt-editor-tools { position: absolute; bottom: 24px; left: 12px; right: 12px; z-index: 10; }
+.bolt-editor-toolbar { display: flex; flex-wrap: wrap; gap: var(--bolt-space, 8px); }
+.bolt-editor-toolbar button, .bolt-layers button { border: 1px solid var(--bolt-border, #dedbe8); border-radius: var(--bolt-radius, 8px); padding: 6px 8px; background: var(--bolt-surface, var(--paper, #fff)); color: inherit; font: inherit; font-size: 12px; cursor: pointer; }
+.bolt-editor-toolbar button:disabled, .bolt-layers button:disabled { opacity: .45; cursor: default; }
+.bolt-layers { font-size: 12px; min-width: 0; }
+.bolt-layers > input, .bolt-inspector input { box-sizing: border-box; width: 100%; border: 1px solid var(--bolt-border, #dedbe8); border-radius: var(--bolt-radius, 8px); padding: 8px; margin-bottom: 8px; background: var(--bolt-surface, var(--paper, #fff)); color: inherit; }
+.bolt-layer-items { max-height: 50vh; overflow: auto; margin-top: 10px; }
+.bolt-layer { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; padding: 6px 2px; border-bottom: 1px solid var(--bolt-border, #dedbe8); }
+.bolt-layer[data-selected='true'] { background: color-mix(in srgb, var(--bolt-accent, #7963d2), transparent 90%); }
+.bolt-layer .bolt-layer-name { flex: 1; min-width: 75px; overflow: hidden; text-overflow: ellipsis; border: 0; text-align: left; }
+.bolt-layer small { display: block; font-size: 10px; opacity: .65; }
+.bolt-layers button:focus-visible, .bolt-editor button:focus-visible { outline: 2px solid var(--bolt-accent, #7963d2); outline-offset: 2px; }
+.bolt-inspector label { display: block; font-size: 12px; }
+@media (max-width: 800px) { .bolt-editor-body > aside { width: 180px; } .bolt-editor-body > aside:last-child { display: none; } }
+@media (max-width: 550px) { .bolt-editor-body > aside { display: none; } }
+.bolt-waypoint { position: absolute; width: 14px; height: 14px; padding: 0; pointer-events: all; background: var(--bolt-accent, #7963d2); border: 2px solid white; border-radius: 50%; cursor: move; }
+
+/* A plain canvas by default; editor panels remain opt-in. */
+.bolt-flow { position: relative; width: 100%; height: 100%; min-height: 0; }
+.bolt-flow-tools { position: absolute; z-index: 5; left: 12px; top: 12px; max-width: calc(100% - 24px); pointer-events: none; }
+.bolt-flow-tools > * { pointer-events: auto; }
+/* React Flow panels remain usable while the drawing overlay owns canvas gestures. */
+.bolt-canvas .react-flow__panel { z-index: 7; }
+.bolt-flow-tools { z-index: 10; }

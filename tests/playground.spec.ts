@@ -24,9 +24,9 @@ async function drag(page: Page, from: { x: number; y: number }, to: { x: number;
   await page.mouse.up();
 }
 async function start(page: Page) {
-  await page.goto('/');
+  await page.goto('/playground');
   await expect(page.locator('.flow-card')).toHaveCount(6);
-  await expect(page.getByRole('button', { name: '1 plugins', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: '2 plugins', exact: true })).toBeVisible();
 }
 
 test('graph editing, shared history, layout, and plugin unloading', async ({ page }) => {
@@ -82,7 +82,7 @@ test('connected comments follow node dragging, support replies, and retain offse
   await page.getByLabel('Attach new annotations to').selectOption('research');
   await page.getByRole('textbox', { name: 'New annotation text', exact: true }).fill('Check the accessibility requirements');
   const stage = await page.locator('.canvas-stage').boundingBox(); if (!stage) throw new Error('Missing canvas');
-  await page.mouse.click(stage.x + 430, stage.y + 280);
+  await page.mouse.click(stage.x + 430, stage.y + stage.height - 200);
   await expect(page.locator('.bolt-comment-node')).toHaveCount(1);
   await page.getByRole('textbox', { name: 'Reply', exact: true }).fill('Include keyboard navigation');
   await page.getByRole('button', { name: 'Add reply', exact: true }).click();
@@ -145,7 +145,8 @@ test('node style controls persist and promoted sketches retain their identity', 
 
 test('local persistence and plugin choices restore on reload', async ({ page }) => {
   await start(page);
-  await enable(page, 'Local autosave');
+  await page.getByLabel('Save options', { exact: true }).click();
+  await page.getByRole('checkbox', { name: 'Autosave canvas' }).check();
   await page.getByRole('textbox', { name: 'Canvas name', exact: true }).fill('Saved browser canvas');
   await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('bolt-flow:playground:v1') ?? '{}').name)).toBe('Saved browser canvas');
   await page.reload();
@@ -225,7 +226,7 @@ test('comment resolution and JSON reload preserve native data across plugin remo
   await page.getByRole('button', { name: 'Comment tool', exact: true }).click();
   await page.getByRole('textbox', { name: 'New annotation text', exact: true }).fill('A portable discussion');
   const box = await page.locator('.canvas-stage').boundingBox(); if (!box) throw new Error('No canvas');
-  await page.mouse.click(box.x + 350, box.y + 330);
+  await page.mouse.click(box.x + 350, box.y + box.height - 200);
   await page.getByRole('button', { name: 'Resolve discussion', exact: true }).click();
   await expect(page.locator('.bolt-comment-node')).toHaveClass(/is-resolved/);
   await page.getByRole('button', { name: 'Reopen discussion', exact: true }).click();
@@ -294,13 +295,13 @@ test('host shapes and fonts appear automatically and round-trip as portable data
   await page.getByRole('button', { name: 'Triangle tool', exact: true }).click();
   const box = (await page.locator('.canvas-stage').boundingBox())!;
   await drag(page, { x: box.x + 240, y: box.y + 240 }, { x: box.x + 410, y: box.y + 350 });
-  await expect(page.locator('[data-drawing-shape="triangle"] path')).toHaveAttribute('d', /M.*L.*Z/);
+  await expect(page.locator('[data-drawing-shape="triangle"] path:not(.bolt-hit-target)')).toHaveAttribute('d', /M.*L.*Z/);
   await page.getByRole('button', { name: 'Text tool', exact: true }).click();
   const fonts = page.getByRole('combobox', { name: 'Drawing font', exact: true });
   await expect(fonts.locator('option')).toHaveText(['Normal', 'Handwritten', 'Code', 'Editorial']);
   await fonts.selectOption({ label: 'Handwritten' });
   await page.getByRole('textbox', { name: 'New annotation text', exact: true }).fill('Sketch an idea. Make it real.');
-  await page.mouse.click(box.x + 460, box.y + 370);
+  await page.mouse.click(box.x + 460, box.y + box.height - 200);
   await expect(page.locator('.bolt-ink-text')).toHaveCSS('font-family', '"Gochi Hand", cursive');
   expect(await page.evaluate(async () => { await document.fonts.load('22px "Gochi Hand"'); return document.fonts.check('22px "Gochi Hand"'); })).toBe(true);
   await page.getByRole('combobox', { name: 'Font family', exact: true }).selectOption({ label: 'Code' });

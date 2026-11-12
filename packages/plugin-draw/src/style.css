@@ -40,3 +40,30 @@
 .bolt-draw-tools button:focus-visible { outline: 2px solid #7963d2; outline-offset: -2px; }
 @media (max-width: 699px) { .bolt-tool-help { display: none; } .bolt-draw-quickbar { justify-content: space-between; gap: 6px; } }
 @media (max-width: 600px) { .bolt-draw-tool-row button small { display: none; } .bolt-draw-settings { gap: 7px 10px; } .bolt-anchor-picker select { max-width: 150px; } .bolt-draw-content { flex-basis: 100%; } }
+.bolt-canvas { --bolt-ink-auto: #252936; }
+.bolt-canvas[data-theme='dark'] { --bolt-ink-auto: #f1f3f8; }
+.bolt-canvas .react-flow__node-bolt-drawing, .bolt-drawing-node { pointer-events: none; }
+.bolt-drawing-node .bolt-ink-svg { pointer-events: none; }
+.bolt-drawing-node .bolt-ink-svg > * { pointer-events: visiblePainted; }
+.bolt-drawing-node .bolt-ink-text, .bolt-drawing-node .react-flow__resize-control, .bolt-drawing-node > :not(svg):not(.bolt-anchor-badge) { pointer-events: auto; }
+.bolt-drawing-node > .bolt-ink-svg { pointer-events: none; }
+.bolt-ink-text { overflow: visible; }
+.bolt-annotation-text { width: 100%; height: 100%; position: relative; }
+.bolt-rich-display { overflow: hidden; height: 100%; white-space: pre-wrap; overflow-wrap: anywhere; }
+.bolt-rich-editor { width: 100%; height: 100%; overflow: auto; outline: 2px solid var(--bolt-accent, #7963d2); border-radius: 4px; background: var(--paper, #fff); color: inherit; white-space: pre-wrap; overflow-wrap: anywhere; }
+.bolt-text-formatting { position: absolute; left: 0; bottom: calc(100% + 8px); display: flex; align-items: center; gap: 4px; width: max-content; max-width: 460px; flex-wrap: wrap; padding: 6px; z-index: 30; border: 1px solid var(--line, #ddd); border-radius: 8px; background: var(--paper, #fff); color: var(--ink, #252936); font: 11px system-ui; box-shadow: 0 4px 12px #0002; }
+.bolt-text-formatting button, .bolt-annotation-actions button { background: var(--paper, #fff); color: inherit; border: 1px solid var(--line, #ddd); padding: 5px 7px; border-radius: 4px; cursor: pointer; }
+.bolt-text-formatting label { display: flex; align-items: center; gap: 3px; }
+.bolt-text-formatting input[type='color'], .bolt-annotation-actions input[type='color'] { width: 22px; height: 24px; border: 0; padding: 0; }
+.bolt-comment-node { position: relative; }
+.bolt-comment-text { margin: 8px 0; line-height: 1.5; flex: 1; min-height: 0; }
+.bolt-annotation-actions { position: absolute; top: calc(100% + 6px); right: 0; z-index: 25; padding: 4px 6px; border: 1px solid var(--line, #ddd); border-radius: 6px; background: var(--paper, #fff); color: var(--ink, #252936); font: 11px system-ui; width: max-content; pointer-events: auto; }
+.bolt-annotation-actions summary { cursor: pointer; }
+.bolt-annotation-actions > div { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; padding: 8px; width: 300px; }
+.bolt-annotation-actions label { display: flex; align-items: center; gap: 4px; }
+.bolt-annotation-actions input[type='range'] { width: 65px; }
+.bolt-annotation-actions select { max-width: 180px; background: var(--paper, #fff); color: inherit; }
+.bolt-anchor-links { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; }
+.bolt-drawing-node .bolt-ink-svg > .bolt-hit-target { pointer-events: stroke; }
+/* XYFlow sets pointer-events inline on node wrappers. Painted children own drawing hit testing. */
+.bolt-canvas .react-flow__node-bolt-drawing { pointer-events: none !important; }

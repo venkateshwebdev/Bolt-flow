@@ -1,6 +1,14 @@
 # Roadmap: native connected canvas alpha
 
+For the source-based comparison with the reference workflow drawing mode and the detailed implementation sequence, see [the connected-canvas customization plan](CUSTOMIZATION-PLAN.md). It covers drawing parity, replaceable editor UI, host-triggered saving, workflow canvas JSON, and release milestones. The plan records the proposed direction; the implementation status below identifies shipped capabilities and remaining work.
+
 Bolt Flow is an unpublished 0.1.0 npm-workspace alpha. The current implementation uses one React Flow canvas with an independent optional perfect-freehand drawing plugin, not an embedded Excalidraw editor. A dated validation snapshot appears below; broader cross-browser, touch, accessibility, performance, and release qualification remain future work. Implemented below describes source capabilities, not release certification.
+
+## November 2026 customization implementation
+
+Implemented: schema 2 with v1 migration, manual/async persistence controller, host workflow canvas projection and reference-canvas import, reusable editor components/actions/slots, rich text, group/hide/lock layers, attachment chains, paint hit targets, toolbar/preset customization, generated-JSON preview/apply, editable waypoints, and optional PNG export. The playground uses explicit Save/Open and opt-in Autosave.
+
+See [the integration guide](CUSTOMIZATION.md) for actual APIs and limits. Save-as/document libraries, cloud adapters/services, reattachment-on-drag policy, advanced container transforms, image tools, SVG, multiplayer and performance qualification remain future work. The detailed plan is a direction, not a claim of complete drawing-editor parity.
 
 ## Current foundation (implemented)
 
@@ -42,16 +50,20 @@ Bolt Flow is an unpublished 0.1.0 npm-workspace alpha. The current implementatio
 - Structural sharing, batched operations, patch history, and worker-assisted layout.
 - Benchmarks for large graphs, native ink, opaque extension payloads, and long editing sessions.
 - Optional CRDT transport/presence, offline synchronization, and conflict semantics.
-- Evaluate image tools, canvas image exporters, and user-provided AI backends with explicit data controls.
+- Evaluate image tools, SVG exporters, and user-provided AI backends with explicit data controls.
 
 ## Explicit boundaries and provenance
 
-No Excalidraw dependency, rendering/migration of legacy Excalidraw scenes, or Excalidraw/full drawing-editor parity. Images, rotation, full groups, multiplayer, canvas PNG/SVG export, remote plugin execution, and sandboxing are not supported features. Host-defined shapes are not a managed shape-library browser. Optional native drawing is one package, not a separately downloadable package per tool. Smart edges and promotion are not reversible graph/sketch synchronization.
+No Excalidraw dependency, rendering/migration of legacy Excalidraw scenes, or Excalidraw/full drawing-editor parity. Images, rotation, full groups, multiplayer, canvas SVG export, remote plugin execution, and sandboxing are not supported features. Host-defined shapes are not a managed shape-library browser. Optional native drawing is one package, not a separately downloadable package per tool. Smart edges and promotion are not reversible graph/sketch synchronization.
 
 The user-supplied XYFlow Pro example was inspected for the concept only; its code was not copied because of license restrictions. The implementation independently uses perfect-freehand's public API. Preserve React Flow attribution and all applicable upstream licenses/notices, including Fontsource/Gochi Hand font assets and retained legacy Excalidraw material. No Excalidraw-era dependency overrides are required by the current manifests.
 
 ## Validation and release gates
 
+**November 12, 2026 snapshot:** typecheck, 58 unit tests, all 26 Chromium browser tests, production package/playground builds and the built-consumer check passed. Dependency audit reported zero vulnerabilities. The new coverage includes manual saving, saved view restoration, async persistence races/conflicts, rich text, chained attachments, layers, generated JSON, editable routes and PNG export. This is local validation, not cross-browser or physical-device qualification.
+
 From the repository root, run `npm run typecheck`, `npm test`, `npm run test:e2e`, `npm run build`, `npm run test:consumer`, and `npm audit`. Install Chromium with `npx playwright install chromium` if needed. **September 9, 2026 snapshot:** typecheck, 38 unit tests, 16 Chromium workflows, package/playground builds, and built-consumer smoke passed; audit reported zero vulnerabilities. Seven package dry runs included licenses, READMEs, and declarations. Coverage includes custom shapes/fonts, Select/Pan and live-drag regressions, public CSS/font assets, and resized fallback geometry. Rerun these checks for every release candidate; production lazy loading still merits deployment-specific smoke checks.
 
 Do not describe the product as production-ready or superior to upstream tools without benchmarks, accessibility checks, cross-browser tests, threat modeling, documented compatibility, tested migrations, and reliable release/rollback procedures. Review package artifacts with `npm pack --dry-run` per workspace and confirm scope ownership before any explicitly authorized publication. Planned work above is not a promise of currently supported features. See the [root README](../README.md) for local setup and integration.
+
+The documentation now pairs each fenced example with an editable, isolated local-package sandbox. Partial excerpts include explicit host setup and service mocks. Fast annotation gestures retain coalesced samples and survive inline callback changes during host rerenders; regression coverage includes release/cancel behavior and history.

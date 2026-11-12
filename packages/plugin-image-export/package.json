@@ -1,0 +1,31 @@
+{
+  "name": "bolt-flow-plugin-image-export",
+  "version": "0.1.0",
+  "description": "Optional full-canvas PNG export for Bolt Flow",
+  "type": "module",
+  "license": "MIT",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --sourcemap --clean --external bolt-flow-core --external html-to-image"
+  },
+  "peerDependencies": {
+    "bolt-flow-core": "^0.1.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "html-to-image": "^1.11.13"
+  }
+}
